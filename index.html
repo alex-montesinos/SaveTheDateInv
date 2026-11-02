@@ -43,14 +43,14 @@
     --seal: calc(var(--u) * 17);        /* wax seal */
 
     /* Video size once it opens up */
-    --TW: min(94vw, 1280px, calc((100vh - 56px) * 16 / 9));
+    --TW: min(94vw, 1280px, calc((100vh - 150px) * 16 / 9));
 
     --ease: cubic-bezier(.65,0,.35,1);
   }
   @supports (height: 100svh){
     :root{
       --W: min(90vw, 780px, calc((100svh - 150px) * 1.5));
-      --TW: min(94vw, 1280px, calc((100svh - 56px) * 16 / 9));
+      --TW: min(94vw, 1280px, calc((100svh - 150px) * 16 / 9));
     }
   }
   /* Tall phone screens: the postcard turns portrait (4:5) */
@@ -66,12 +66,8 @@
   }
 
   *{ box-sizing:border-box; margin:0; padding:0; }
-  html, body{ height:100%; }
+  html, body{ height:100%; overflow:hidden; }
   body{
-    min-height:100vh;
-    display:grid;
-    place-items:center;
-    overflow:hidden;
     color:var(--ink);
     font-family:"Cormorant Garamond", Georgia, "Times New Roman", serif;
     background:
@@ -90,6 +86,16 @@
   }
 
   /* ---------- Scene ---------- */
+  /* A fixed, screen-sized frame that crops anything poking past the edges
+     (like the flaps when they swing open). Without it, Android Chrome
+     widens the page and zooms out, pushing everything off center. */
+  .viewport{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+    display:grid;
+    place-items:center;
+  }
   .scene{
     display:flex;
     flex-direction:column;
@@ -329,8 +335,8 @@
     letter-spacing:.25em;
     text-indent:.25em;
     text-transform:uppercase;
-    color:#fff;
-    text-shadow:0 1px 3px rgba(0,0,0,.45);
+    color:#3f3a31;
+    text-shadow:0 0 4px rgba(255,253,248,.9);
   }
   .postmark{
     position:absolute;
@@ -407,10 +413,7 @@
   }
   .theater-on .dim{ opacity:1; }
 
-  .theater-cap{ display:none; }
-  @media (max-aspect-ratio: 4/5){
-    .theater-cap{
-      display:block;
+  .theater-cap{
       position:fixed; left:0; right:0;
       top:calc(50% + var(--TW) * 9 / 32 + 26px);
       z-index:45;
@@ -426,7 +429,7 @@
       transition:opacity 1.2s ease 1.2s;
     }
     .theater-cap em{
-      display:block;
+      display:none;
       margin-top:14px;
       font-size:14px;
       letter-spacing:.02em;
@@ -435,6 +438,8 @@
       color:#a39a8a;
     }
     .theater-on .theater-cap{ opacity:1; }
+  @media (max-aspect-ratio: 4/5){
+    .theater-cap em{ display:block; }
   }
 
   .endcard{
@@ -626,6 +631,7 @@
   </defs>
 </svg>
 
+<div class="viewport">
 <main class="scene">
   <p class="eyebrow">Special delivery</p>
 
@@ -691,7 +697,8 @@
 </main>
 
 <div class="dim" aria-hidden="true"></div>
-<p class="theater-cap" aria-hidden="true">Haley &amp; Alex · 10 · 09 · 2027<em>Turn your phone sideways for a bigger view</em></p>
+<p class="theater-cap" aria-hidden="true">10.09.2027 &nbsp;|&nbsp; MI<em>Turn your phone sideways for a bigger view</em></p>
+</div>
 
 <noscript>
   <style>.scene{display:none}</style>
@@ -705,7 +712,7 @@
     start:   "20271009",   // YYYYMMDD
     end:     "20271010",   // day after (all-day event)
     details: "Save the date! Formal invitation to follow.",
-    location: ""           // e.g. "Detroit, MI" once you're ready to share it
+    location: "Michigan"   // change to the venue once you're ready to share it
   };
   /* ======================================================================== */
 
